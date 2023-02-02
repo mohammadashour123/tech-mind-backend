@@ -42,8 +42,8 @@ export default {
         AR: String,
       },
       a: {
-        EN: String,
-        AR: String,
+        EN: [String],
+        AR: [String],
       },
     },
   ],

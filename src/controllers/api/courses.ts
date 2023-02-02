@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import Deploma from "../../models/deplomas.js";
 import Course from "../../models/courses.js";
+// import courses from "../../courses.js";
 
 import { CourseType } from "../../types/course";
 import {
@@ -174,6 +175,13 @@ const deleteCourse = async (req: Request, res: Response): Promise<void> => {
       res.status(400).json({ ok: false, msg: "Invalid Course ID" });
       return;
     }
+
+    // delete the course from other deplomas
+    const deplomasContainsCourse = await Deploma.updateMany(
+      { courses: { $in: _id } },
+      { $pull: { courses: _id } }
+    );
+    console.log(deplomasContainsCourse);
     res.status(200).json({ ok: true, msg: "Course Deleted Successfully" });
   } catch (err) {
     let msg = "";

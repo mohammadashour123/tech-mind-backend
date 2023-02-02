@@ -16,6 +16,6 @@ export interface SimpleCourse {
   what_you_will_learn: StringLangs;
   fqa: {
     q: StringLang;
-    a: StringLang;
+    a: StringLangs;
   }[];
 }

@@ -56,7 +56,13 @@ export const checkIfCompletedCourse = (course: CourseType): courseReturn => {
     !course.fqa ||
     course.fqa.length < 1 ||
     !course.fqa[0].q ||
-    !course.fqa[0].a
+    !course.fqa[0].a ||
+    !course.fqa[0].q.AR ||
+    !course.fqa[0].q.EN ||
+    !course.fqa[0].a.AR ||
+    !course.fqa[0].a.EN ||
+    course.fqa[0].a.AR.length < 1 ||
+    course.fqa[0].a.EN.length < 1
   ) {
     msg += "FQA";
   } else if (typeof course.duration !== "number" || course.duration <= 0) {
@@ -70,6 +76,18 @@ export const checkIfCompletedCourse = (course: CourseType): courseReturn => {
     course.real_projects <= 0
   ) {
     msg += "Real Projects";
+  } else if (
+    course.have_objectives &&
+    (!course.objectives ||
+      course.objectives.length < 1 ||
+      !course.objectives[0].name ||
+      !course.objectives[0].name.EN ||
+      !course.objectives[0].name.AR ||
+      !course.objectives[0].description.EN ||
+      !course.objectives[0].description.AR ||
+      !course.objectives[0].icon)
+  ) {
+    msg += "Objectives";
   } else {
     return { ok: true, msg: "" };
   }
@@ -94,6 +112,8 @@ export const getCourseDataFromBody = (course: CourseType): CourseType => {
     lectures,
     real_projects,
     workshops,
+    have_objectives,
+    objectives,
   } = course;
 
   return {
@@ -113,5 +133,7 @@ export const getCourseDataFromBody = (course: CourseType): CourseType => {
     lectures,
     real_projects,
     workshops,
+    have_objectives,
+    objectives,
   };
 };

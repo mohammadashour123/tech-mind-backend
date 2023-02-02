@@ -41,6 +41,23 @@ const CourseSchema = new Schema<CourseType>(
       type: Boolean,
       default: false,
     },
+    have_objectives: {
+      type: Boolean,
+      default: false,
+    },
+    objectives: [
+      {
+        name: {
+          AR: String,
+          EN: String,
+        },
+        description: {
+          AR: String,
+          EN: String,
+        },
+        icon: String,
+      },
+    ],
   },
   { timestamps: true }
 );

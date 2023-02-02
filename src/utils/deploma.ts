@@ -56,7 +56,13 @@ export const checkIfCompletedDeploma = (
     !deploma.fqa ||
     deploma.fqa.length < 1 ||
     !deploma.fqa[0].q ||
-    !deploma.fqa[0].a
+    !deploma.fqa[0].a ||
+    !deploma.fqa[0].q.AR ||
+    !deploma.fqa[0].q.EN ||
+    !deploma.fqa[0].a.AR ||
+    !deploma.fqa[0].a.EN ||
+    deploma.fqa[0].a.AR.length < 1 ||
+    deploma.fqa[0].a.EN.length < 1
   ) {
     msg += "FQA";
   } else {

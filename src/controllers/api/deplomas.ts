@@ -8,6 +8,7 @@ import {
   getDeplomaDataFromBody,
   couresDataToSelected,
 } from "../../utils/deploma.js";
+// import deploma from "../../deploma.js";
 
 const getDeploma = async (req: Request, res: Response): Promise<void> => {
   // get deploma id
@@ -46,10 +47,10 @@ const getDeploma = async (req: Request, res: Response): Promise<void> => {
     res.status(400).json({ ok: false, msg });
   }
 };
+
 const getAllDeplomas = async (req: Request, res: Response): Promise<void> => {
   try {
     const deplomas = await Deploma.find();
-
     // return all deplomas
     res
       .status(200)
@@ -127,6 +128,7 @@ const updateDeploma = async (req: Request, res: Response): Promise<void> => {
     res.status(400).json({ ok: true, msg });
   }
 };
+
 const deleteDeploma = async (req: Request, res: Response): Promise<void> => {
   // get deploma id
   const id = req.params.id;
@@ -149,6 +151,7 @@ const deleteDeploma = async (req: Request, res: Response): Promise<void> => {
     res.status(400).json({ ok: true, msg });
   }
 };
+
 const addDeplomaCourse = async (req: Request, res: Response): Promise<void> => {
   // deploma id
   const id = req.params.id;
