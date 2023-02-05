@@ -23,4 +23,5 @@ export interface CourseType extends SimpleCourse {
     };
     icon: string;
   }[];
+  related_courses: string[];
 }

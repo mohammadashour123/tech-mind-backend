@@ -8,18 +8,18 @@ import {
   getDeplomaDataFromBody,
   couresDataToSelected,
 } from "../../utils/deploma.js";
+import { checkId } from "../../utils/index.js";
 // import deploma from "../../deploma.js";
 
 const getDeploma = async (req: Request, res: Response): Promise<void> => {
   // get deploma id
   const id = req.params.id;
   try {
+    checkId(id);
+
     // check if deploma exist
     const deploma = await Deploma.findById(id);
-    if (!deploma) {
-      res.status(400).json({ ok: false, msg: "Invalid Deploma ID" });
-      return;
-    }
+    if (!deploma) throw Error("Invalid Deploma ID");
 
     // get deploma courses
     const deplomaCoursesPromises = deploma.courses.map(async (course) => {
@@ -100,21 +100,19 @@ const updateDeploma = async (req: Request, res: Response): Promise<void> => {
   // deploma body
   const body: DeplomaType = req.body;
 
-  // return any error message if any
-  const perfectDeploma = checkIfCompletedDeploma(body);
-  if (!perfectDeploma.ok) {
-    res.status(400).json({ msg: perfectDeploma.msg, ok: false });
-    return;
-  }
-  // take the needed data from the body
-  const deploma = getDeplomaDataFromBody(body);
   try {
+    checkId(id);
+
+    // return any error message if any
+    const perfectDeploma = checkIfCompletedDeploma(body);
+    if (!perfectDeploma.ok) throw Error(perfectDeploma.msg);
+
+    // take the needed data from the body
+    const deploma = getDeplomaDataFromBody(body);
+
     // update the deploma
     const newDeploma = await Deploma.findByIdAndUpdate(id, deploma);
-    if (!newDeploma) {
-      res.status(400).json({ ok: false, msg: "Invalid Deploma ID" });
-      return;
-    }
+    if (!newDeploma) throw Error("Invalid Deploma ID");
 
     // return successful message
     res.status(200).json({ ok: true, msg: "Successfully Updated" });
@@ -133,13 +131,12 @@ const deleteDeploma = async (req: Request, res: Response): Promise<void> => {
   // get deploma id
   const id = req.params.id;
   try {
+    checkId(id);
+
     // delete the deploma
     const deploma = await Deploma.findByIdAndDelete(id);
     // if no deploma returned so there are no deploma exist with this id
-    if (!deploma) {
-      res.status(400).json({ msg: "Invalid Deploma ID", ok: false });
-      return;
-    }
+    if (!deploma) throw Error("Invalid Deploma ID");
     res.status(200).json({ ok: true, msg: "Deleted Successfully" });
   } catch (err) {
     let msg = "";
@@ -158,21 +155,20 @@ const addDeplomaCourse = async (req: Request, res: Response): Promise<void> => {
   // course id
   const courseID = req.body.course_id;
   try {
+    checkId(id);
+    checkId(courseID);
+
     // check if course exist
     const isExistInDB = await Course.findById(courseID);
-    if (!isExistInDB) {
-      res.status(400).json({ ok: false, msg: "Invalid Course ID" });
-      return;
-    }
+    if (!isExistInDB) throw Error("Invalid Course ID");
+
     // check if course added to the deploma before
     const isExistInDeploma = await Deploma.findOne({
       _id: id,
       courses: { $in: [courseID] },
     });
-    if (isExistInDeploma) {
-      res.status(400).json({ ok: false, msg: "Course is already exist" });
-      return;
-    }
+
+    if (isExistInDeploma) throw Error("Course is already exist");
 
     // update the deploma
     const deploma = await Deploma.findByIdAndUpdate(id, {
@@ -180,10 +176,7 @@ const addDeplomaCourse = async (req: Request, res: Response): Promise<void> => {
     });
 
     // check if deploma exist
-    if (!deploma) {
-      res.status(400).json({ msg: "Invalid Deploma ID", ok: false });
-      return;
-    }
+    if (!deploma) throw Error("Invalid Deploma ID");
 
     res
       .status(200)

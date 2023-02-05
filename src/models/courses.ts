@@ -58,6 +58,7 @@ const CourseSchema = new Schema<CourseType>(
         icon: String,
       },
     ],
+    related_courses: [{ type: Schema.Types.ObjectId, ref: "Course" }],
   },
   { timestamps: true }
 );
