@@ -14,14 +14,30 @@ import { checkId } from "../../utils/index.js";
 const getCourse = async (req: Request, res: Response): Promise<void> => {
   // get course id
   const id: string = req.params.id;
+  const deplomaId = req.query.deploma as string;
 
   try {
     checkId(id);
+
+    let course;
+    let deploma;
+    // check if deploma id exist
+    if (deplomaId) {
+      checkId(deplomaId);
+      deploma = await Deploma.findById(deplomaId).select(["name", "_id"]);
+      if (!deploma) throw Error("Invalid Deploma ID");
+      course = await Course.findById(id);
+    } else {
+      course = await Course.findOne({ _id: id, is_dependent: true });
+    }
+
     // check if course exist
-    const course = await Course.findById(id);
     if (!course) throw Error("Invalid Course ID");
     // return the course
-    res.status(200).json({ ok: true, msg: "Course is here", data: course });
+
+    res
+      .status(200)
+      .json({ ok: true, msg: "Course is here", data: { course, deploma } });
   } catch (err) {
     let msg = "";
     if (err instanceof Error) {
