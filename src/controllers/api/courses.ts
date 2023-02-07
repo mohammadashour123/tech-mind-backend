@@ -205,7 +205,7 @@ const getRelatedCourses = async (
     const id = req.params.id;
     // data needed from related courses
     checkId(id);
-    const neededData = { _id: 1, name: 1, main_img: 1 };
+    const neededData = { _id: 1, name: 1, main_img: 1, description: 1 };
 
     // get parent deploma
     const relatedDeploma = await Deploma.findOne({
@@ -217,7 +217,8 @@ const getRelatedCourses = async (
       const course = await Course.findById(id);
       const relatedCourses = await Course.find({
         _id: { $in: course?.related_courses },
-      });
+      }).select(neededData);
+
       res.status(200).json({
         ok: true,
         msg: "Related Courses is here",
