@@ -6,7 +6,7 @@ import {
   checkIfCompletedDeploma,
   getDeplomaCoursesData,
   getDeplomaDataFromBody,
-  couresDataToSelected,
+  couresDataToSelecte,
 } from "../../utils/deploma.js";
 import { checkId } from "../../utils/index.js";
 // import deploma from "../../deploma.js";
@@ -23,7 +23,7 @@ const getDeploma = async (req: Request, res: Response): Promise<void> => {
 
     // get deploma courses
     const deplomaCoursesPromises = deploma.courses.map(async (course) => {
-      return await Course.findById(course._id).select(couresDataToSelected);
+      return await Course.findById(course._id).select(couresDataToSelecte);
     });
 
     // get deploma courses data
@@ -68,15 +68,11 @@ const getAllDeplomas = async (req: Request, res: Response): Promise<void> => {
 
 const addDeploma = async (req: Request, res: Response): Promise<void> => {
   const body: DeplomaType = req.body;
-  // return any error message if any
-  const perfectDeploma = checkIfCompletedDeploma(body);
-  if (!perfectDeploma.ok) {
-    res.status(400).json({ msg: perfectDeploma.msg, ok: false });
-    return;
-  }
-  // take the needed data from the body
-  const deploma = getDeplomaDataFromBody(body);
   try {
+    // return any error message if any
+    checkIfCompletedDeploma(body);
+    // take the needed data from the body
+    const deploma = getDeplomaDataFromBody(body);
     // add deploma to DB
     const createdDeploma = new Deploma(deploma);
     await createdDeploma.save();
@@ -104,8 +100,7 @@ const updateDeploma = async (req: Request, res: Response): Promise<void> => {
     checkId(id);
 
     // return any error message if any
-    const perfectDeploma = checkIfCompletedDeploma(body);
-    if (!perfectDeploma.ok) throw Error(perfectDeploma.msg);
+    checkIfCompletedDeploma(body);
 
     // take the needed data from the body
     const deploma = getDeplomaDataFromBody(body);

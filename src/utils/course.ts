@@ -1,97 +1,46 @@
+import {
+  checkArrayArEn,
+  checkFQA,
+  checkNumber,
+  checkTextArEn,
+} from "./index.js";
+import { StringLangs } from "../types/common";
 import { CourseType } from "../types/course";
-interface courseReturn {
-  ok: boolean;
-  msg: string;
-}
 
-export const checkIfCompletedCourse = (course: CourseType): courseReturn => {
-  let ok = false;
+export const checkIfCompletedCourse = (course: CourseType) => {
   let msg = "Invalid ";
-  console.log(course.duration);
 
-  if (!course) {
-    return {
-      ok: false,
-      msg: "Please Provide all Info to create the course",
-    };
+  if (!course) throw Error("Please Provide all Info to create the course");
+
+  checkTextArEn(course.name, msg + "Name");
+  checkTextArEn(course.description, msg + "Description");
+  checkArrayArEn(course.overview, msg + "Overview");
+  checkArrayArEn(course.what_you_will_learn, msg + "What you will learn text");
+  checkFQA(course.fqa, "FQA");
+  checkNumber(course.duration, msg + "Duration");
+  checkNumber(course.lectures, msg + "Lectures");
+  checkNumber(course.workshops, msg + "Workshops");
+  checkNumber(course.real_projects, msg + "Real Projects");
+
+  if (course.have_target) {
+    const whoIsThisCourseFor = course.who_is_this_course_for as StringLangs;
+    checkArrayArEn(
+      whoIsThisCourseFor,
+      "the course have target put 'who is this course made for' text"
+    );
   }
 
-  if (!course.name || !course.name.AR || !course.name.EN) {
-    msg += "Name";
-  } else if (
-    !course.description ||
-    !course.description.AR ||
-    !course.description.EN
-  ) {
-    msg += "Description";
-  } else if (
-    !course.overview ||
-    !course.overview.AR ||
-    !course.overview.EN ||
-    course.overview.AR.length < 1 ||
-    course.overview.EN.length < 1
-  ) {
-    msg += "Overview";
-  } else if (!course.main_img) msg += "Main Image";
-  else if (!course.other_src) msg += "Secondary Image or Video";
-  else if (!course.icon) msg += "Icon";
-  else if (
-    !course.what_you_will_learn ||
-    !course.what_you_will_learn.AR ||
-    !course.what_you_will_learn.EN ||
-    course.what_you_will_learn.AR.length < 1 ||
-    course.what_you_will_learn.EN.length < 1
-  ) {
-    msg += "What you will learn text";
-  } else if (
-    course.have_target &&
-    (!course.who_is_this_course_for ||
-      !course.who_is_this_course_for.AR ||
-      !course.who_is_this_course_for.EN ||
-      course.who_is_this_course_for.AR.length < 1 ||
-      course.who_is_this_course_for.EN.length < 1)
-  ) {
-    msg += "the course have target put 'who is this course made for' text";
-  } else if (
-    !course.fqa ||
-    course.fqa.length < 1 ||
-    !course.fqa[0].q ||
-    !course.fqa[0].a ||
-    !course.fqa[0].q.AR ||
-    !course.fqa[0].q.EN ||
-    !course.fqa[0].a.AR ||
-    !course.fqa[0].a.EN ||
-    course.fqa[0].a.AR.length < 1 ||
-    course.fqa[0].a.EN.length < 1
-  ) {
-    msg += "FQA";
-  } else if (typeof course.duration !== "number" || course.duration <= 0) {
-    msg += "Duration";
-  } else if (typeof course.lectures !== "number" || course.lectures <= 0) {
-    msg += "Lectures";
-  } else if (typeof course.workshops !== "number" || course.workshops <= 0) {
-    msg += "Workshops";
-  } else if (
-    typeof course.real_projects !== "number" ||
-    course.real_projects <= 0
-  ) {
-    msg += "Real Projects";
-  } else if (
-    course.have_objectives &&
-    (!course.objectives ||
-      course.objectives.length < 1 ||
-      !course.objectives[0].name ||
-      !course.objectives[0].name.EN ||
-      !course.objectives[0].name.AR ||
-      !course.objectives[0].description.EN ||
-      !course.objectives[0].description.AR ||
-      !course.objectives[0].icon)
-  ) {
-    msg += "Objectives";
-  } else {
-    return { ok: true, msg: "" };
+  if (course.have_objectives) {
+    const objective = course.objectives as ObjectivesType[];
+    checkIfCourseHaveObjectives(
+      objective,
+      "Course Objectives is missing and the course have objectives"
+    );
   }
-  return { ok, msg };
+
+  if (!course.main_img) throw Error(msg + "Main Image");
+  if (!course.other_src) throw Error(msg + "Secondary Image or Video");
+  if (!course.icon) throw Error(msg + "Icon");
 };
 
 export const getCourseDataFromBody = (course: CourseType): CourseType => {
@@ -129,11 +78,44 @@ export const getCourseDataFromBody = (course: CourseType): CourseType => {
     what_you_will_learn,
     who_is_this_course_for,
     icon,
-    duration,
-    lectures,
-    real_projects,
-    workshops,
+    duration: parseInt(`${duration}`),
+    lectures: parseInt(`${lectures}`),
+    real_projects: parseInt(`${real_projects}`),
+    workshops: parseInt(`${workshops}`),
     have_objectives,
     objectives,
   };
+};
+
+// helper functions
+
+interface ObjectivesType {
+  name: {
+    EN: string;
+    AR: string;
+  };
+  description: {
+    EN: string;
+    AR: string;
+  };
+  icon: string;
+}
+
+const checkIfCourseHaveObjectives = (
+  objectives: ObjectivesType[],
+  message: string
+) => {
+  if (!objectives || objectives.length < 1) throw Error(message);
+  objectives.forEach((objective) => {
+    if (
+      !objective.name ||
+      !objective.name.EN ||
+      !objective.name.AR ||
+      !objective.description.EN ||
+      !objective.description.AR ||
+      !objective.icon
+    ) {
+      throw Error(message);
+    }
+  });
 };

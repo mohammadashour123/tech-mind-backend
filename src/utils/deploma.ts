@@ -1,9 +1,8 @@
+import { checkArrayArEn, checkFQA, checkTextArEn } from "./index.js";
+import { StringLang, StringLangs } from "../types/common";
 import { DeplomaType, DeplomaCourse } from "../types/deploma";
-interface deplomaReturn {
-  ok: boolean;
-  msg: string;
-}
-export const couresDataToSelected = [
+
+export const couresDataToSelecte = [
   "_id",
   "name",
   "description",
@@ -13,62 +12,20 @@ export const couresDataToSelected = [
   "real_projects",
   "lectures",
 ];
-export const checkIfCompletedDeploma = (
-  deploma: DeplomaType
-): deplomaReturn => {
-  let ok = false;
+
+export const checkIfCompletedDeploma = (deploma: DeplomaType) => {
   let msg = "Invalid ";
 
-  if (!deploma) {
-    return {
-      ok: false,
-      msg: "Please Provide all Info to create the deploma",
-    };
-  }
+  if (!deploma) throw Error("Please Provide all Info to create the deploma");
 
-  if (!deploma.name || !deploma.name.AR || !deploma.name.EN) {
-    msg += "Name";
-  } else if (
-    !deploma.description ||
-    !deploma.description.AR ||
-    !deploma.description.EN
-  ) {
-    msg += "Description";
-  } else if (
-    !deploma.overview ||
-    !deploma.overview.AR ||
-    !deploma.overview.EN ||
-    deploma.overview.AR.length < 1 ||
-    deploma.overview.EN.length < 1
-  ) {
-    msg += "Overview";
-  } else if (!deploma.main_img) msg += "Main Image";
-  else if (!deploma.other_src) msg += "Secondary Image or Video";
-  else if (
-    !deploma.what_you_will_learn ||
-    !deploma.what_you_will_learn.AR ||
-    !deploma.what_you_will_learn.EN ||
-    deploma.what_you_will_learn.AR.length < 1 ||
-    deploma.what_you_will_learn.EN.length < 1
-  ) {
-    msg += "What you will learn text";
-  } else if (
-    !deploma.fqa ||
-    deploma.fqa.length < 1 ||
-    !deploma.fqa[0].q ||
-    !deploma.fqa[0].a ||
-    !deploma.fqa[0].q.AR ||
-    !deploma.fqa[0].q.EN ||
-    !deploma.fqa[0].a.AR ||
-    !deploma.fqa[0].a.EN ||
-    deploma.fqa[0].a.AR.length < 1 ||
-    deploma.fqa[0].a.EN.length < 1
-  ) {
-    msg += "FQA";
-  } else {
-    return { ok: true, msg: "" };
-  }
-  return { ok, msg };
+  checkTextArEn(deploma.name, msg + "Name");
+  checkTextArEn(deploma.description, msg + "Description");
+  checkArrayArEn(deploma.overview, msg + "Overview");
+  checkArrayArEn(deploma.what_you_will_learn, msg + "What you will learn text");
+  checkFQA(deploma.fqa, msg + "FQA");
+
+  if (!deploma.main_img) throw Error(msg + "Main Image");
+  if (!deploma.other_src) throw Error(msg + "Secondary Image or Video");
 };
 
 export const getDeplomaDataFromBody = (deploma: DeplomaType): DeplomaType => {
@@ -82,6 +39,7 @@ export const getDeplomaDataFromBody = (deploma: DeplomaType): DeplomaType => {
     what_you_will_learn,
     who_is_this_course_for,
   } = deploma;
+
   return {
     description,
     fqa,

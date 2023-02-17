@@ -70,15 +70,15 @@ const getAllCourses = async (req: Request, res: Response): Promise<void> => {
 const addCourse = async (req: Request, res: Response): Promise<void> => {
   // get course data
   const body: CourseType = req.body;
-  // return any error message if missing data
-  const perfectCourse = checkIfCompletedCourse(body);
-  if (!perfectCourse.ok) throw Error("perfectCourse.msg");
-  // take the needed data from the body
-  const course = getCourseDataFromBody(body);
+
   try {
+    // return any error message if missing data
+    checkIfCompletedCourse(body);
+    // take the needed data from the body
+    const course = getCourseDataFromBody(body);
     // add course to courses
-    const createdCourse = new Course(course);
-    await createdCourse.save();
+    // const createdCourse = new Course(course);
+    // await createdCourse.save();
     // return msg
     res.status(200).json({ ok: true, msg: "Successfully created" });
   } catch (err) {
@@ -96,16 +96,14 @@ const updateCourse = async (req: Request, res: Response): Promise<void> => {
   // course id
   const id = req.params.id;
 
-  // course new data
-  const body = req.body;
-
-  // return any error message if missing data
-  const perfectCourse = checkIfCompletedCourse(body);
-  if (!perfectCourse.ok) throw Error(perfectCourse.msg);
-  // just take the needed data from the body
-  const course = getCourseDataFromBody(body);
-
   try {
+    const body = req.body;
+    // return any error message if missing data
+    checkIfCompletedCourse(body);
+
+    // just take the needed data from the body
+    const course = getCourseDataFromBody(body);
+
     // check if  course exists
     checkId(id);
     const newCourse = await Course.findByIdAndUpdate(id, course);
