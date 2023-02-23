@@ -1,6 +1,6 @@
 import { checkArrayArEn, checkFQA, checkTextArEn } from "./index.js";
 import { StringLang, StringLangs } from "../types/common";
-import { DeplomaType, DeplomaCourse } from "../types/deploma";
+import { DiplomaType, DiplomaCourse } from "../types/diploma";
 
 export const couresDataToSelecte = [
   "_id",
@@ -13,22 +13,22 @@ export const couresDataToSelecte = [
   "lectures",
 ];
 
-export const checkIfCompletedDeploma = (deploma: DeplomaType) => {
+export const checkIfCompletedDiploma = (diploma: DiplomaType) => {
   let msg = "Invalid ";
 
-  if (!deploma) throw Error("Please Provide all Info to create the deploma");
+  if (!diploma) throw Error("Please Provide all Info to create the diploma");
 
-  checkTextArEn(deploma.name, msg + "Name");
-  checkTextArEn(deploma.description, msg + "Description");
-  checkArrayArEn(deploma.overview, msg + "Overview");
-  checkArrayArEn(deploma.what_you_will_learn, msg + "What you will learn text");
-  checkFQA(deploma.fqa, msg + "FQA");
+  checkTextArEn(diploma.name, msg + "Name");
+  checkTextArEn(diploma.description, msg + "Description");
+  checkArrayArEn(diploma.overview, msg + "Overview");
+  checkArrayArEn(diploma.what_you_will_learn, msg + "What you will learn text");
+  checkFQA(diploma.fqa, msg + "FQA");
 
-  if (!deploma.main_img) throw Error(msg + "Main Image");
-  if (!deploma.other_src) throw Error(msg + "Secondary Image or Video");
+  if (!diploma.main_img) throw Error(msg + "Main Image");
+  if (!diploma.other_src) throw Error(msg + "Secondary Image or Video");
 };
 
-export const getDeplomaDataFromBody = (deploma: DeplomaType): DeplomaType => {
+export const getDiplomaDataFromBody = (diploma: DiplomaType): DiplomaType => {
   const {
     description,
     fqa,
@@ -38,7 +38,7 @@ export const getDeplomaDataFromBody = (deploma: DeplomaType): DeplomaType => {
     overview,
     what_you_will_learn,
     who_is_this_course_for,
-  } = deploma;
+  } = diploma;
 
   return {
     description,
@@ -53,12 +53,12 @@ export const getDeplomaDataFromBody = (deploma: DeplomaType): DeplomaType => {
   };
 };
 
-export const getDeplomaCoursesData = (deplomaCourses: DeplomaCourse[]) => {
+export const getDiplomaCoursesData = (diplomaCourses: DiplomaCourse[]) => {
   let lectures = 0;
   let real_projects = 0;
   let workshops = 0;
   let duration = 0;
-  let courses = deplomaCourses.map((ele) => {
+  let courses = diplomaCourses.map((ele) => {
     lectures += ele.duration;
     real_projects += ele.real_projects;
     workshops += ele.workshops;

@@ -1,8 +1,8 @@
 import { Schema, model, Types } from "mongoose";
-import { DeplomaType } from "../types/deploma";
+import { DiplomaType } from "../types/diploma";
 import common from "./common.js";
 
-const DeplomaSchema = new Schema<DeplomaType>(
+const DiplomaSchema = new Schema<DiplomaType>(
   {
     name: common.name,
     description: common.description,
@@ -17,4 +17,4 @@ const DeplomaSchema = new Schema<DeplomaType>(
   { timestamps: true }
 );
 
-export default model("Deploma", DeplomaSchema);
+export default model("Diploma", DiplomaSchema);

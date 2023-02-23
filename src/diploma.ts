@@ -1,6 +1,6 @@
-import { DeplomaType } from "./types/deploma";
+import { DiplomaType } from "./types/diploma";
 
-const deploma: DeplomaType = {
+const diploma: DiplomaType = {
   name: { EN: "Data Science and AI", AR: "علوم البيانات و الذكاء الاصطناعى" },
   description: {
     EN: "The course is based on practical application and building real projects and machine learning models and applications",
@@ -124,4 +124,4 @@ const deploma: DeplomaType = {
   courses: [],
 };
 
-export default deploma;
+export default diploma;

@@ -6,7 +6,7 @@ import dotenv from "dotenv";
 dotenv.config();
 
 import routes from "./routes/index.js";
-import { connect, set } from "mongoose";
+import mongoose, { connect, set } from "mongoose";
 
 const app = express();
 
@@ -20,10 +20,12 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/api", routes);
 
 const PORT: number | string = process.env.PORT || 8000;
-const MONGO_SECRET = process.env.MONGO_SECRET || "";
+const mongodbUrl =
+  process.env.MONGO_SECRET || "mongodb://0.0.0.0:27017/techmind";
 
 set("strictQuery", false);
-connect(MONGO_SECRET)
+mongoose
+  .connect(mongodbUrl)
   .then(() =>
     app.listen(PORT, () =>
       console.log("Connected to DB && Listening on PORT " + PORT)

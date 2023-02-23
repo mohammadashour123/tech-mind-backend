@@ -1,20 +1,22 @@
 import express from "express";
 import {
-  addDeploma,
-  deleteDeploma,
-  getAllDeplomas,
-  getDeploma,
-  updateDeploma,
-  addDeplomaCourse,
-} from "../../controllers/api/deplomas.js";
+  addDiploma,
+  deleteDiploma,
+  getAllDiplomas,
+  getDiploma,
+  updateDiploma,
+  addDiplomaCourse,
+  deleteDiplomaCourse,
+} from "../../controllers/api/diplomas.js";
 
 const router = express.Router();
 
-router.get("/", getAllDeplomas);
-router.get("/:id", getDeploma);
-router.post("/", addDeploma);
-router.put("/:id", updateDeploma);
-router.delete("/:id", deleteDeploma);
-router.patch("/course/:id", addDeplomaCourse);
+router.get("/", getAllDiplomas);
+router.get("/:id", getDiploma);
+router.post("/", addDiploma);
+router.put("/:id", updateDiploma);
+router.delete("/:id", deleteDiploma);
+router.post("/course/:id", addDiplomaCourse);
+router.delete("/course/:id", deleteDiplomaCourse);
 
 export default router;

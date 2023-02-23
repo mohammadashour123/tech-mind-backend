@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import Deploma from "../../models/deplomas.js";
+import Deploma from "../../models/diplomas.js";
 import Course from "../../models/courses.js";
 // import courses from "../../courses.js";
 
@@ -77,8 +77,8 @@ const addCourse = async (req: Request, res: Response): Promise<void> => {
     // take the needed data from the body
     const course = getCourseDataFromBody(body);
     // add course to courses
-    // const createdCourse = new Course(course);
-    // await createdCourse.save();
+    const createdCourse = new Course(course);
+    await createdCourse.save();
     // return msg
     res.status(200).json({ ok: true, msg: "Successfully created" });
   } catch (err) {
