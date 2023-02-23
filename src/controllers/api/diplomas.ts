@@ -50,7 +50,8 @@ const getDiploma = async (req: Request, res: Response): Promise<void> => {
 
 const getAllDiplomas = async (req: Request, res: Response): Promise<void> => {
   try {
-    const diplomas = await Diploma.find();
+    const dataArr = ["_id", "name", "description", "main_img"];
+    const diplomas = await Diploma.find().select(dataArr);
     // return all diplomas
     res
       .status(200)

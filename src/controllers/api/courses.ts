@@ -51,8 +51,16 @@ const getCourse = async (req: Request, res: Response): Promise<void> => {
 
 const getAllCourses = async (req: Request, res: Response): Promise<void> => {
   try {
+    const dataArr = [
+      "_id",
+      "name",
+      "description",
+      "main_img",
+      "duration",
+      "lectures",
+    ];
     // get and send all courses
-    const courses = await Course.find();
+    const courses = await Course.find().select(dataArr);
     res
       .status(200)
       .json({ ok: true, msg: "All Courses is here", data: courses });
