@@ -50,7 +50,14 @@ const getCourse = async (req: Request, res: Response): Promise<void> => {
 };
 
 const getAllCourses = async (req: Request, res: Response): Promise<void> => {
-  const filters = req.params;
+  let query = req.query;
+
+  const is_dependent = query.is_dependent || { $in: [true, false] };
+  const limit = +(query.limit || 25);
+  const page = +(query.page || 1);
+
+  const skip = (page - 1) * limit;
+
   try {
     const dataArr = [
       "_id",
@@ -60,8 +67,13 @@ const getAllCourses = async (req: Request, res: Response): Promise<void> => {
       "duration",
       "lectures",
     ];
+
+    console.log(page);
     // get and send all courses
-    const courses = await Course.find(filters).select(dataArr);
+    const courses = await Course.find({ is_dependent })
+      .skip(skip)
+      .limit(limit)
+      .select(dataArr);
     res
       .status(200)
       .json({ ok: true, msg: "All Courses is here", data: courses });
@@ -72,6 +84,7 @@ const getAllCourses = async (req: Request, res: Response): Promise<void> => {
     } else {
       msg = "Unable to Get all courses";
     }
+    console.log(msg);
     res.status(400).json({ ok: false, msg });
   }
 };

@@ -49,10 +49,22 @@ const getDiploma = async (req: Request, res: Response): Promise<void> => {
 };
 
 const getAllDiplomas = async (req: Request, res: Response): Promise<void> => {
+  const query = req.query;
+
+  const limit = +(query.limit || 25);
+  const page = +(query.page || 1);
+
+  const skip = (page - 1) * limit;
+
+  const dataArr = ["_id", "name", "description", "main_img"];
+
   try {
-    const dataArr = ["_id", "name", "description", "main_img"];
-    const diplomas = await Diploma.find().select(dataArr);
     // return all diplomas
+    const diplomas = await Diploma.find()
+      .skip(skip)
+      .limit(limit)
+      .select(dataArr);
+
     res
       .status(200)
       .json({ ok: true, msg: "Diplomas are here", data: diplomas });
