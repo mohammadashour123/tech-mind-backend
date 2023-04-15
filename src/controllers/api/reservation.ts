@@ -29,7 +29,7 @@ const getAllReservations = async (
     } else {
       msg = "Unable to get the reservations";
     }
-    res.status(400).json({ ok: true, msg });
+    res.status(400).json({ ok: false, msg });
   }
 };
 
@@ -48,11 +48,12 @@ const addReservation = async (req: Request, res: Response): Promise<void> => {
   } catch (err) {
     let msg = "";
     if (err instanceof Error) {
+      console.log(err.message);
       msg = err.message;
     } else {
       msg = "Unable to add this diploma";
     }
-    res.status(400).json({ ok: true, msg });
+    res.status(400).json({ ok: false, msg });
   }
 };
 
@@ -76,7 +77,7 @@ const deleteReservation = async (
     } else {
       msg = "Unable to add this diploma";
     }
-    res.status(400).json({ ok: true, msg });
+    res.status(400).json({ ok: false, msg });
   }
 };
 

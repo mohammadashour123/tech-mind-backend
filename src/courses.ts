@@ -97,7 +97,7 @@ const courses: CourseType[] = [
         },
       },
     ],
-    have_target: false,
+    have_target: false, // to display
     is_dependent: true,
     icon: "https://firebasestorage.googleapis.com/v0/b/techmind-assets.appspot.com/o/courses%2Fpytion_icon.png?alt=media&token=f3904b91-e7b8-4d34-a136-adf55710ff39",
     main_img:
@@ -105,6 +105,19 @@ const courses: CourseType[] = [
     other_src:
       "https://firebasestorage.googleapis.com/v0/b/techmind-assets.appspot.com/o/courses%2Fpython_other_src.gif?alt=media&token=fcc56189-c4d6-4e49-8156-00cddaefe1ed",
     have_objectives: false,
+    objectives: [
+      {
+        name: {
+          EN: "Engilsh",
+          AR: "Arabic",
+        },
+        description: {
+          EN: "Engilsh",
+          AR: "Arabic",
+        },
+        icon: "icon",
+      },
+    ],
   },
   {
     name: {

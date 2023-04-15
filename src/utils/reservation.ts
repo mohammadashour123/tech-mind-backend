@@ -10,7 +10,7 @@ export const checkIfCompletedReservation = (reservation: ReservationType) => {
   if (!reservation.name) throw Error(msg + "Name");
   if (!reservation.email) throw Error(msg + "Email");
   if (!reservation.phone) throw Error(msg + "Phone");
-  if (!reservation.tech_id) throw Error(msg + "tech_id");
+  if (!reservation.tech_id) throw Error(msg + "Tech Id (diploma/course)");
 
   const tech_id = reservation.tech_id as string;
   try {
