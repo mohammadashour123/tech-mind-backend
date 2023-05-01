@@ -27,6 +27,8 @@ const getCourse = async (req: Request, res: Response): Promise<void> => {
       deploma = await Deploma.findById(deplomaId).select(["name", "_id"]);
       if (!deploma) throw Error("Invalid Deploma ID");
       course = await Course.findById(id);
+    } else if (req.query.isAdmin === "true") {
+      course = await Course.findById(id);
     } else {
       course = await Course.findOne({ _id: id, is_dependent: true });
     }
@@ -66,6 +68,7 @@ const getAllCourses = async (req: Request, res: Response): Promise<void> => {
       "main_img",
       "duration",
       "lectures",
+      "is_dependent",
     ];
 
     console.log(page);
@@ -172,7 +175,7 @@ const deleteCourse = async (req: Request, res: Response): Promise<void> => {
 };
 
 // related courses
-const addRelatedCourses = async (req: Request, res: Response) => {
+const addRelatedCourse = async (req: Request, res: Response) => {
   // course will be updated
   const id = req.params.id;
 
@@ -183,7 +186,7 @@ const addRelatedCourses = async (req: Request, res: Response) => {
     checkId(relatedCourseId);
 
     // check if mainCourse exist
-    const mainCourse = await Course.findById(relatedCourseId);
+    const mainCourse = await Course.findById(id);
     if (!mainCourse) throw Error("Invalid Course ID, the course will be added");
 
     // check if related course exist
@@ -194,13 +197,13 @@ const addRelatedCourses = async (req: Request, res: Response) => {
     // check if relatedCourse is exist in teh course
     const isCourseExist = await Course.findOne({
       _id: id,
-      related_courses: { $in: [relatedCourse] },
+      related_courses: { $in: [relatedCourse._id] },
     });
     if (isCourseExist) throw Error("Course Is Already Exist");
 
     // update
     const course = await Course.findByIdAndUpdate(id, {
-      $push: { related_courses: relatedCourse },
+      $push: { related_courses: relatedCourse._id },
     });
 
     if (!course) throw Error("Course didn't added");
@@ -227,37 +230,44 @@ const getRelatedCourses = async (
     checkId(id);
     const neededData = { _id: 1, name: 1, main_img: 1, description: 1 };
 
-    // get parent deploma
-    const relatedDeploma = await Deploma.findOne({
-      courses: { $in: id },
-    });
-    // ckeck if there are a parent deploma
-    // if no select a random 3 courses
-    if (!relatedDeploma) {
-      const course = await Course.findById(id);
-      const relatedCourses = await Course.find({
-        _id: { $in: course?.related_courses },
-      }).select(neededData);
+    // // get parent deploma
+    // const relatedDeploma = await Deploma.findOne({
+    //   courses: { $in: id },
+    // });
+    // // ckeck if there are a parent deploma
+    // // if no select a random 3 courses
+    // if (!relatedDeploma) {
+    //   const course = await Course.findById(id);
+    //   const relatedCourses = await Course.find({
+    //     _id: { $in: course?.related_courses },
+    //   }).select(neededData);
 
-      res.status(200).json({
-        ok: true,
-        msg: "Related Courses is here",
-        data: relatedCourses,
-      });
+    //   res.status(200).json({
+    //     ok: true,
+    //     msg: "Related Courses is here",
+    //     data: relatedCourses,
+    //   });
 
-      return;
-    }
-    // if they have a parent deploma select a 3 courses
-    const relatedCoursesPromises = relatedDeploma.courses
-      .filter((course) => !course.equals(id))
-      .map((course) => course.toString())
-      .slice(0, 3)
-      .map(async (id) => {
-        const course = await Course.findById(id).select(neededData);
-        return course;
-      });
-    // wait until they return
-    const relatedCourses = await Promise.all(relatedCoursesPromises);
+    //   return;
+    // }
+    // // if they have a parent deploma select a 3 courses
+    // const relatedCoursesPromises = relatedDeploma.courses
+    //   .filter((course) => !course.equals(id))
+    //   .map((course) => course.toString())
+    //   .slice(0, 3)
+    //   .map(async (id) => {
+    //     const course = await Course.findById(id).select(neededData);
+    //     return course;
+    //   });
+    // // wait until they return
+    // const relatedCourses = await Promise.all(relatedCoursesPromises);
+
+    const course = await Course.findById(id).select("related_courses");
+    const relatedCoursesPromises = course?.related_courses?.map(async (id) =>
+      Course.findById(id).select(neededData)
+    );
+
+    const relatedCourses = await Promise.all(relatedCoursesPromises || []);
 
     res
       .status(200)
@@ -267,7 +277,45 @@ const getRelatedCourses = async (
     if (err instanceof Error) {
       msg = err.message;
     } else {
-      msg = "Unable to Get all courses";
+      msg = "Unable to Get related courses";
+    }
+    res.status(400).json({ ok: false, msg });
+  }
+};
+
+const deleteRelatedCourse = async (req: Request, res: Response) => {
+  // course will be updated
+  const id = req.params.id;
+
+  // course will be added
+  const relatedCourseId = req.body.courseId;
+  try {
+    checkId(id);
+    checkId(relatedCourseId);
+
+    // check if mainCourse exist
+    const mainCourse = await Course.findById(id);
+    if (!mainCourse) throw Error("Invalid Course ID, the course will be added");
+
+    // check if related course exist
+    const relatedCourse = await Course.findById(relatedCourseId);
+    if (!relatedCourse)
+      throw Error("Invalid Course ID, the course will be added");
+
+    // check if relatedCourse is exist in teh course
+    const isCourseExist = await Course.findByIdAndUpdate(id, {
+      $pull: { related_courses: relatedCourse._id },
+    });
+    if (!isCourseExist)
+      throw Error("Course Doesn't have this course as related");
+
+    res.status(200).json({ ok: true, msg: "Course Deleted Successfully" });
+  } catch (err) {
+    let msg = "";
+    if (err instanceof Error) {
+      msg = err.message;
+    } else {
+      msg = "Unable to Delete this course";
     }
     res.status(400).json({ ok: false, msg });
   }
@@ -279,6 +327,7 @@ export {
   addCourse,
   updateCourse,
   deleteCourse,
-  addRelatedCourses,
+  addRelatedCourse,
   getRelatedCourses,
+  deleteRelatedCourse,
 };

@@ -6,7 +6,8 @@ import {
   getAllCourses,
   getCourse,
   updateCourse,
-  addRelatedCourses,
+  addRelatedCourse,
+  deleteRelatedCourse,
 } from "../../controllers/api/courses.js";
 
 const router = express.Router();
@@ -16,7 +17,8 @@ router.get("/:id", getCourse);
 router.post("/", addCourse);
 router.patch("/:id", updateCourse);
 router.delete("/:id", deleteCourse);
-router.patch("/related/:id", addRelatedCourses);
 router.get("/related/:id", getRelatedCourses);
+router.post("/related/:id", addRelatedCourse);
+router.delete("/related/:id", deleteRelatedCourse);
 
 export default router;

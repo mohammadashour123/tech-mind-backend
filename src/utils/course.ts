@@ -105,6 +105,7 @@ const checkIfCourseHaveObjectives = (
   objectives: ObjectivesType[],
   message: string
 ) => {
+  console.log(JSON.stringify(objectives));
   if (!objectives || objectives.length < 1) throw Error(message);
   objectives.forEach((objective) => {
     if (
