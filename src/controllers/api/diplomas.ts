@@ -75,7 +75,7 @@ const getAllDiplomas = async (req: Request, res: Response): Promise<void> => {
     } else {
       msg = "Unable to update this course";
     }
-    res.status(400).json({ ok: true, msg });
+    res.status(400).json({ ok: false, msg });
   }
 };
 
@@ -98,7 +98,7 @@ const addDiploma = async (req: Request, res: Response): Promise<void> => {
     } else {
       msg = "Unable to add this diploma";
     }
-    res.status(400).json({ ok: true, msg });
+    res.status(400).json({ ok: false, msg });
   }
 };
 
@@ -131,7 +131,7 @@ const updateDiploma = async (req: Request, res: Response): Promise<void> => {
     } else {
       msg = "Unable to add this diploma";
     }
-    res.status(400).json({ ok: true, msg });
+    res.status(400).json({ ok: false, msg });
   }
 };
 
@@ -153,7 +153,7 @@ const deleteDiploma = async (req: Request, res: Response): Promise<void> => {
     } else {
       msg = "Unable to add this diploma";
     }
-    res.status(400).json({ ok: true, msg });
+    res.status(400).json({ ok: false, msg });
   }
 };
 
@@ -196,7 +196,7 @@ const addDiplomaCourse = async (req: Request, res: Response): Promise<void> => {
     } else {
       msg = "Unable to add this diploma";
     }
-    res.status(400).json({ ok: true, msg });
+    res.status(400).json({ ok: false, msg });
   }
 };
 const deleteDiplomaCourse = async (
@@ -241,7 +241,7 @@ const deleteDiplomaCourse = async (
     } else {
       msg = "Unable to add this diploma";
     }
-    res.status(400).json({ ok: true, msg });
+    res.status(400).json({ ok: false, msg });
   }
 };
 

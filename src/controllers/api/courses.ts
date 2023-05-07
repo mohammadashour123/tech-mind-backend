@@ -69,6 +69,7 @@ const getAllCourses = async (req: Request, res: Response): Promise<void> => {
       "duration",
       "lectures",
       "is_dependent",
+      "icon",
     ];
 
     console.log(page);

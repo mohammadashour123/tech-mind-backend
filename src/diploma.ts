@@ -122,6 +122,7 @@ const diploma: DiplomaType = {
   main_img:
     "https://firebasestorage.googleapis.com/v0/b/techmind-assets.appspot.com/o/deplomas%2FAiDataScienceDeploma.jfif?alt=media&token=bdea3fca-6086-4c03-944d-08fb1e3eb161",
   courses: [],
+  have_video: false,
 };
 
 export default diploma;

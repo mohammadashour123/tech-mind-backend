@@ -20,9 +20,30 @@ const getAllMessages = async (req: Request, res: Response): Promise<void> => {
     if (err instanceof Error) {
       msg = err.message;
     } else {
-      msg = "Unable to get the reservations";
+      msg = "Unable to get the messages";
     }
-    res.status(400).json({ ok: true, msg });
+    res.status(400).json({ ok: false, msg });
+  }
+};
+const getMessage = async (req: Request, res: Response): Promise<void> => {
+  try {
+    const id = req.params.id;
+
+    const message = await Message.findById(id);
+    if (!message) throw Error("Message Doen't exist!");
+
+    // return all diplomas
+    res
+      .status(200)
+      .json({ ok: true, msg: "The Message is here", data: message });
+  } catch (err) {
+    let msg = "";
+    if (err instanceof Error) {
+      msg = err.message;
+    } else {
+      msg = "Unable to get the message";
+    }
+    res.status(400).json({ ok: false, msg });
   }
 };
 
@@ -43,9 +64,9 @@ const addMessage = async (req: Request, res: Response): Promise<void> => {
     if (err instanceof Error) {
       msg = err.message;
     } else {
-      msg = "Unable to add this diploma";
+      msg = "Unable to add this message";
     }
-    res.status(400).json({ ok: true, msg });
+    res.status(400).json({ ok: false, msg });
   }
 };
 
@@ -64,10 +85,10 @@ const deleteMessage = async (req: Request, res: Response): Promise<void> => {
     if (err instanceof Error) {
       msg = err.message;
     } else {
-      msg = "Unable to add this diploma";
+      msg = "Unable to add this message";
     }
-    res.status(400).json({ ok: true, msg });
+    res.status(400).json({ ok: false, msg });
   }
 };
 
-export { addMessage, getAllMessages, deleteMessage };
+export { addMessage, getAllMessages, deleteMessage, getMessage };

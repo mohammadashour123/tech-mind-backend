@@ -3,13 +3,14 @@ import {
   getAllMessages,
   addMessage,
   deleteMessage,
+  getMessage,
 } from "../../controllers/api/messages.js";
 
 const router = express.Router();
 
 router.get("/", getAllMessages);
 router.post("/", addMessage);
+router.get("/:id", getMessage);
 router.delete("/:id", deleteMessage);
-// router.delete("/", deleteAllMessages);
 
 export default router;

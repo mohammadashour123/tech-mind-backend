@@ -15,7 +15,7 @@ const router = express.Router();
 router.get("/", getAllCourses);
 router.get("/:id", getCourse);
 router.post("/", addCourse);
-router.patch("/:id", updateCourse);
+router.put("/:id", updateCourse);
 router.delete("/:id", deleteCourse);
 router.get("/related/:id", getRelatedCourses);
 router.post("/related/:id", addRelatedCourse);

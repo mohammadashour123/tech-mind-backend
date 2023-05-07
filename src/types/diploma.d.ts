@@ -4,6 +4,7 @@ import { StringLang, StringLangs, SimpleCourse } from "./common";
 export interface DiplomaType extends SimpleCourse {
   who_is_this_course_for: StringLangs;
   courses: Types.ObjectId[];
+  have_video: boolean;
 }
 export interface DiplomaCourse {
   _id: Types.ObjectId;

@@ -20,8 +20,9 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use("/api", routes);
 
 const PORT: number | string = process.env.PORT || 8000;
-// const mongodbUrl = "mongodb://0.0.0.0:27017/techmind";
-const mongodbUrl = process.env.MONGO_SECRET || "";
+
+let mongodbUrl: string = process.env.MONGO_SECRET || "";
+if (process.env.ENV === "dev") mongodbUrl = process.env.MONGO_DEV_SECRET || "";
 
 set("strictQuery", false);
 mongoose

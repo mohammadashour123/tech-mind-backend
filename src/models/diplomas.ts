@@ -13,6 +13,10 @@ const DiplomaSchema = new Schema<DiplomaType>(
     who_is_this_course_for: common.who_is_this_course_for,
     fqa: common.fqa,
     courses: [{ type: Schema.Types.ObjectId, ref: "Course" }],
+    have_video: {
+      type: Boolean,
+      default: false,
+    },
   },
   { timestamps: true }
 );
