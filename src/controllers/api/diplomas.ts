@@ -8,7 +8,7 @@ import {
   getDiplomaDataFromBody,
   couresDataToSelecte,
 } from "../../utils/diploma.js";
-import { checkId } from "../../utils/index.js";
+import { checkId, deleteTechImages } from "../../utils/index.js";
 // import diploma from "../../diploma.js";
 
 const getDiploma = async (req: Request, res: Response): Promise<void> => {
@@ -21,14 +21,21 @@ const getDiploma = async (req: Request, res: Response): Promise<void> => {
     const diploma = await Diploma.findById(id);
     if (!diploma) throw Error("Invalid Diploma ID");
 
-    // get diploma courses
-    const diplomaCoursesPromises = diploma.courses.map(async (course) => {
-      return await Course.findById(course._id).select(couresDataToSelecte);
-    });
+    // // get diploma courses
+    // const diplomaCoursesPromises = diploma.courses.map(async (course) => {
+    //   return await Course.findById(course._id).select(couresDataToSelecte);
+    // });
 
-    // get diploma courses data
-    const diplomaCoursesResponse = await Promise.all(diplomaCoursesPromises);
-    const diplomaCourses = diplomaCoursesResponse as unknown as DiplomaCourse[];
+    // // get diploma courses data
+    // const diplomaCoursesResponse = await Promise.all(diplomaCoursesPromises);
+    // const diplomaCourses = diplomaCoursesResponse as unknown as DiplomaCourse[];
+
+    const diplomaCourses = (await Course.find({
+      _id: { $in: diploma.courses },
+    })) as DiplomaCourse[];
+
+    console.log(diplomaCourses);
+
     const diplomaCoursesData = getDiplomaCoursesData(diplomaCourses);
 
     // return the diploma with the data
@@ -145,6 +152,10 @@ const deleteDiploma = async (req: Request, res: Response): Promise<void> => {
     const diploma = await Diploma.findByIdAndDelete(id);
     // if no diploma returned so there are no diploma exist with this id
     if (!diploma) throw Error("Invalid Diploma ID");
+
+    // delete course images
+    await deleteTechImages(diploma, "Diploma");
+
     res.status(200).json({ ok: true, msg: "Deleted Successfully" });
   } catch (err) {
     let msg = "";

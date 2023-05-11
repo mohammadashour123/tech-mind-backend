@@ -9,7 +9,7 @@ import {
   getCourseDataFromBody,
 } from "../../utils/course.js";
 
-import { checkId } from "../../utils/index.js";
+import { checkId, deleteTechImages } from "../../utils/index.js";
 
 const getCourse = async (req: Request, res: Response): Promise<void> => {
   // get course id
@@ -152,10 +152,23 @@ const deleteCourse = async (req: Request, res: Response): Promise<void> => {
 
   try {
     checkId(_id);
+
     // delete the course
-    const course = await Course.findOneAndDelete({ _id });
+    const course = await Course.findByIdAndDelete(_id);
+
     // check if course exist
     if (!course) throw Error("Invalid Course ID");
+
+    // delete course images
+    await deleteTechImages(course, "Course");
+
+    // delete the couse from related courses
+    await Course.updateMany(
+      {},
+      {
+        $pull: { related_courses: _id },
+      }
+    );
 
     // delete the course from other deplomas
     await Deploma.updateMany(
@@ -227,6 +240,8 @@ const getRelatedCourses = async (
   try {
     // get course id
     const id = req.params.id;
+    const is_dependent = req.query.is_dependent || [true, false];
+    console.log(is_dependent);
     // data needed from related courses
     checkId(id);
     const neededData = { _id: 1, name: 1, main_img: 1, description: 1 };
@@ -264,11 +279,13 @@ const getRelatedCourses = async (
     // const relatedCourses = await Promise.all(relatedCoursesPromises);
 
     const course = await Course.findById(id).select("related_courses");
-    const relatedCoursesPromises = course?.related_courses?.map(async (id) =>
-      Course.findById(id).select(neededData)
-    );
 
-    const relatedCourses = await Promise.all(relatedCoursesPromises || []);
+    const relatedCoursesIds = course?.related_courses;
+
+    const relatedCourses = await Course.find({
+      _id: { $in: relatedCoursesIds },
+      is_dependent: is_dependent,
+    }).select(neededData);
 
     res
       .status(200)
