@@ -8,8 +8,8 @@ import {
   getDiplomaDataFromBody,
   couresDataToSelecte,
 } from "../../utils/diploma.js";
-import { checkId, deleteTechImages } from "../../utils/index.js";
-// import diploma from "../../diploma.js";
+import { checkId, deleteTechImages, getSkipLimit } from "../../utils/index.js";
+import diploma from "../../diploma.js";
 
 const getDiploma = async (req: Request, res: Response): Promise<void> => {
   // get diploma id
@@ -58,10 +58,7 @@ const getDiploma = async (req: Request, res: Response): Promise<void> => {
 const getAllDiplomas = async (req: Request, res: Response): Promise<void> => {
   const query = req.query;
 
-  const limit = +(query.limit || 25);
-  const page = +(query.page || 1);
-
-  const skip = (page - 1) * limit;
+  const { limit, skip } = getSkipLimit(query);
 
   const dataArr = ["_id", "name", "description", "main_img"];
 
@@ -85,6 +82,23 @@ const getAllDiplomas = async (req: Request, res: Response): Promise<void> => {
     res.status(400).json({ ok: false, msg });
   }
 };
+
+// (async () => {
+//   let c = 0;
+//   while (c < 400) {
+//     console.log(c + " Started");
+//     const createdCourse1 = new Diploma({
+//       ...diploma,
+//       name: {
+//         AR: diploma.name.AR + " " + c,
+//         EN: diploma.name.EN + " " + c,
+//       },
+//     });
+//     await createdCourse1.save();
+//     console.log(c + " Finished");
+//     c++;
+//   }
+// })();
 
 const addDiploma = async (req: Request, res: Response): Promise<void> => {
   const body: DiplomaType = req.body;

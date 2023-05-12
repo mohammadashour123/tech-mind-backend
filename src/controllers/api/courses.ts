@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import Deploma from "../../models/diplomas.js";
 import Course from "../../models/courses.js";
-// import courses from "../../courses.js";
+import courses from "../../courses.js";
 
 import { CourseType } from "../../types/course";
 import {
@@ -9,7 +9,7 @@ import {
   getCourseDataFromBody,
 } from "../../utils/course.js";
 
-import { checkId, deleteTechImages } from "../../utils/index.js";
+import { checkId, deleteTechImages, getSkipLimit } from "../../utils/index.js";
 
 const getCourse = async (req: Request, res: Response): Promise<void> => {
   // get course id
@@ -54,11 +54,8 @@ const getCourse = async (req: Request, res: Response): Promise<void> => {
 const getAllCourses = async (req: Request, res: Response): Promise<void> => {
   let query = req.query;
 
+  const { limit, skip } = getSkipLimit(query);
   const is_dependent = query.is_dependent || { $in: [true, false] };
-  const limit = +(query.limit || 25);
-  const page = +(query.page || 1);
-
-  const skip = (page - 1) * limit;
 
   try {
     const dataArr = [
@@ -72,7 +69,6 @@ const getAllCourses = async (req: Request, res: Response): Promise<void> => {
       "icon",
     ];
 
-    console.log(page);
     // get and send all courses
     const courses = await Course.find({ is_dependent })
       .skip(skip)
@@ -92,6 +88,32 @@ const getAllCourses = async (req: Request, res: Response): Promise<void> => {
     res.status(400).json({ ok: false, msg });
   }
 };
+
+// (async () => {
+//   let c = 0;
+//   while (c < 300) {
+//     console.log(c + " Started");
+//     const createdCourse1 = new Course({
+//       ...courses[0],
+//       name: {
+//         AR: courses[0].name.AR + " " + c,
+//         EN: courses[0].name.EN + " " + c,
+//       },
+//     });
+//     await createdCourse1.save();
+//     const createdCourse2 = new Course({
+//       ...courses[1],
+//       name: {
+//         AR: courses[1].name.AR + " " + c,
+//         EN: courses[1].name.EN + " " + c,
+//       },
+//     });
+//     console.log(c + " Finished");
+
+//     c++;
+//     await createdCourse2.save();
+//   }
+// })();
 
 const addCourse = async (req: Request, res: Response): Promise<void> => {
   // get course data

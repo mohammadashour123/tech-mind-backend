@@ -1,7 +1,7 @@
 import Message, { MessageType } from "../../models/messages.js";
 import { Request, Response } from "express";
 
-import { checkId } from "../../utils/index.js";
+import { checkId, getSkipLimit } from "../../utils/index.js";
 import {
   checkIfCompletedMessage,
   getMessageFromBody,
@@ -9,9 +9,9 @@ import {
 
 const getAllMessages = async (req: Request, res: Response): Promise<void> => {
   try {
-    const messages = await Message.find();
+    const { limit, skip } = getSkipLimit(req.query);
+    const messages = await Message.find().skip(skip).limit(limit);
 
-    // return all diplomas
     res
       .status(200)
       .json({ ok: true, msg: "All Messages are here", data: messages });
@@ -46,6 +46,22 @@ const getMessage = async (req: Request, res: Response): Promise<void> => {
     res.status(400).json({ ok: false, msg });
   }
 };
+
+// (async () => {
+//   let c = 0;
+//   while (c < 1000) {
+//     console.log(c + " started");
+//     const newMessage = new Message({
+//       email: "ahmed" + c + "@gmail.com",
+//       message: "test " + c,
+//       name: "test " + c,
+//       phone: Math.ceil(Math.random() * 100000000),
+//       subject: "test " + c++,
+//     });
+//     await newMessage.save();
+//     console.log(c + " Finished");
+//   }
+// })();
 
 const addMessage = async (req: Request, res: Response): Promise<void> => {
   const body: MessageType = req.body;

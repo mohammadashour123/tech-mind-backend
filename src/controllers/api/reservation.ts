@@ -3,7 +3,7 @@ import Course from "../../models/courses.js";
 import Reservation, { ReservationType } from "../../models/reservation.js";
 import { Request, Response } from "express";
 
-import { checkId } from "../../utils/index.js";
+import { checkId, getSkipLimit } from "../../utils/index.js";
 import {
   checkIfCompletedReservation,
   getReservationFromBody,
@@ -14,9 +14,12 @@ const getAllReservations = async (
   res: Response
 ): Promise<void> => {
   try {
+    const { limit, skip } = getSkipLimit(req.query);
     const reservations = await Reservation.find()
       .populate({ path: "fromCourse", select: ["name", "main_img"] })
-      .populate({ path: "fromDiploma", select: ["name", "main_img"] });
+      .populate({ path: "fromDiploma", select: ["name", "main_img"] })
+      .skip(skip)
+      .limit(limit);
 
     // return all diplomas
     res

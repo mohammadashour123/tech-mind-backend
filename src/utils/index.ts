@@ -69,6 +69,14 @@ export const checkNumber = (num: string | number, message: string) => {
   if (typeof num !== "number" || num <= 0) throw Error(message);
 };
 
+export const getSkipLimit = (query: any) => {
+  const limit = +(query.limit || 30);
+  const page = +(query.page || 1);
+
+  const skip = (page - 1) * limit;
+  return { skip, limit };
+};
+
 const deleteImage = async (fileName: string) => {
   try {
     if (!fileName) return null;
