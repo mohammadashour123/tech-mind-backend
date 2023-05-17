@@ -57,14 +57,24 @@ const getDiploma = async (req: Request, res: Response): Promise<void> => {
 
 const getAllDiplomas = async (req: Request, res: Response): Promise<void> => {
   const query = req.query;
+  const q = req.query.query as string;
 
   const { limit, skip } = getSkipLimit(query);
+
+  let filterQuery = {} as any;
+  if (q) {
+    const regex = new RegExp(`.*${q.toLowerCase()}.*`, "ig");
+    console.log(regex);
+    filterQuery = {
+      $or: [{ "name.AR": regex }, { "name.EN": regex }],
+    };
+  }
 
   const dataArr = ["_id", "name", "description", "main_img"];
 
   try {
     // return all diplomas
-    const diplomas = await Diploma.find()
+    const diplomas = await Diploma.find(filterQuery)
       .skip(skip)
       .limit(limit)
       .select(dataArr);

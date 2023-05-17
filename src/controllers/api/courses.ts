@@ -53,6 +53,7 @@ const getCourse = async (req: Request, res: Response): Promise<void> => {
 
 const getAllCourses = async (req: Request, res: Response): Promise<void> => {
   let query = req.query;
+  const q = req.query.query as string;
 
   const { limit, skip } = getSkipLimit(query);
   const is_dependent = query.is_dependent || { $in: [true, false] };
@@ -69,8 +70,18 @@ const getAllCourses = async (req: Request, res: Response): Promise<void> => {
       "icon",
     ];
 
+    let filterQuery = { is_dependent } as any;
+    if (q) {
+      const regex = new RegExp(`.*${q.toLowerCase()}.*`, "ig");
+      console.log(regex);
+      filterQuery = {
+        $or: [{ "name.AR": regex }, { "name.EN": regex }],
+        is_dependent,
+      };
+    }
+
     // get and send all courses
-    const courses = await Course.find({ is_dependent })
+    const courses = await Course.find(filterQuery)
       .skip(skip)
       .limit(limit)
       .select(dataArr);

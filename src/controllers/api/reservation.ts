@@ -9,6 +9,53 @@ import {
   getReservationFromBody,
 } from "../../utils/reservation.js";
 
+// const techIds = [
+//   "645e393d9891e0310742e553",
+//   "645e393d9891e0310742e559",
+//   "645e393d9891e0310742e55f",
+//   "645e393d9891e0310742e565",
+//   "645e393d9891e0310742e56b",
+//   "645e393d9891e0310742e571",
+//   "645e393d9891e0310742e577",
+//   "645e393d9891e0310742e57d",
+//   "645e393d9891e0310742e583",
+//   "645e393d9891e0310742e589",
+//   // diplomas
+//   "645e39d31ee5518a34dcdf7b",
+//   "645e39d31ee5518a34dcdf80",
+//   "645e39d31ee5518a34dcdf85",
+//   "645e39d31ee5518a34dcdf8a",
+//   "645e39d31ee5518a34dcdf8f",
+//   "645e39d31ee5518a34dcdf94",
+//   "645e39d31ee5518a34dcdf99",
+//   "645e39d31ee5518a34dcdf9e",
+//   "645e39d31ee5518a34dcdfa3",
+//   "645e39d31ee5518a34dcdfa8",
+// ];
+
+// (async () => {
+//   let c = 0;
+//   while (c < 500) {
+//     console.log("Reservation Started " + c);
+//     const reservationData = {
+//       createdAt: "2023-02-19T12:31:33.257Z",
+//       email: "a@g.com",
+//       fromCourse: null,
+//       fromDiploma: null,
+//       id: "63f216a55433d81f967d1e56",
+//       name: "ahmed",
+//       phone: "01205875836",
+//       tech_id: techIds[Math.floor(Math.random() * techIds.length)],
+//       updatedAt: "2023-02-19T12:31:33.257Z",
+//     };
+//     const newReservation = new Reservation(reservationData);
+//     await newReservation.save();
+//     console.log("Reservation Finished " + c);
+
+//     c++;
+//   }
+// })();
+
 const getAllReservations = async (
   req: Request,
   res: Response

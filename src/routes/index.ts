@@ -11,4 +11,15 @@ router.use("/diplomas", deplomas);
 router.use("/reservations", reservations);
 router.use("/messages", messages);
 
+router.post("/auth", (req, res) => {
+  const { username, password } = req.body;
+  const { NAME, PASSWORD } = process.env;
+
+  if (username === NAME && password === PASSWORD) {
+    res.status(200).json({ ok: true, token: Math.random() * Date.now() });
+  } else {
+    res.status(401).json({ ok: false, msg: "UnAuthorized User" });
+  }
+});
+
 export default router;
