@@ -1,15 +1,27 @@
 import { initializeApp } from "firebase/app";
 import { getStorage } from "firebase/storage";
+import dotenv from "dotenv";
+dotenv.config();
+
+const {
+  FIRE_BASE_API_KEY,
+  FIRE_BASE_AUTH_DOMAIN,
+  FIRE_BASE_PROJECT_ID,
+  FIRE_BASE_STORAGE_BUCKET,
+  FIRE_BASE_MESSAGING_SENDER_ID,
+  FIRE_BASE_APP_ID,
+  FIRE_BASE_MEASUREMENT_ID,
+} = process.env;
 
 // Initialize Firebase
 const firebaseConfig = {
-  apiKey: "AIzaSyCy0BYdDSk2KQQKMOB_vCRCMlKS3TUamN0",
-  authDomain: "techmind-assets.firebaseapp.com",
-  projectId: "techmind-assets",
-  storageBucket: "techmind-assets.appspot.com",
-  messagingSenderId: "102373339986",
-  appId: "1:102373339986:web:552e1cdf875f0e301a408b",
-  measurementId: "G-8R45BQ56TN",
+  apiKey: FIRE_BASE_API_KEY,
+  authDomain: FIRE_BASE_AUTH_DOMAIN,
+  projectId: FIRE_BASE_PROJECT_ID,
+  storageBucket: FIRE_BASE_STORAGE_BUCKET,
+  messagingSenderId: FIRE_BASE_MESSAGING_SENDER_ID,
+  appId: FIRE_BASE_APP_ID,
+  measurementId: FIRE_BASE_MEASUREMENT_ID,
 };
 
 // Firebase storage reference
