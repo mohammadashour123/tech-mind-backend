@@ -84,6 +84,7 @@ const getAllCourses = async (req: Request, res: Response): Promise<void> => {
     const courses = await Course.find(filterQuery)
       .skip(skip)
       .limit(limit)
+      .sort({ createdAt: -1 })
       .select(dataArr);
     res
       .status(200)

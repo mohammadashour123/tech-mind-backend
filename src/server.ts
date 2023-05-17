@@ -22,9 +22,10 @@ app.use("/api", routes);
 const PORT: number | string = process.env.PORT || 8000;
 
 let mongodbUrl: string = process.env.MONGO_SECRET || "";
-if (process.env.ENV === "dev") mongodbUrl = process.env.MONGO_DEV_SECRET || "";
+// if (process.env.ENV === "dev") mongodbUrl = process.env.MONGO_DEV_SECRET || "";
 
 set("strictQuery", false);
+
 mongoose
   .connect(mongodbUrl)
   .then(() =>

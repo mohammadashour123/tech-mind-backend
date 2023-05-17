@@ -66,7 +66,8 @@ const getAllReservations = async (
       .populate({ path: "fromCourse", select: ["name", "main_img"] })
       .populate({ path: "fromDiploma", select: ["name", "main_img"] })
       .skip(skip)
-      .limit(limit);
+      .limit(limit)
+      .sort({ createdAt: -1 });
 
     // return all diplomas
     res

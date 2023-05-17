@@ -118,9 +118,9 @@ const diploma: DiplomaType = {
     },
   ],
   other_src:
-    "https://firebasestorage.googleapis.com/v0/b/techmind-assets.appspot.com/o/deplomas%2FAiDataScienceDeploma.jfif?alt=media&token=bdea3fca-6086-4c03-944d-08fb1e3eb161",
+    "https://firebasestorage.googleapis.com/v0/b/techmind-assets.appspot.com/o/Diplomas%2FDS_Main.jfif?alt=media&token=f13928cf-add8-40af-be43-6cd90bd1cd6f",
   main_img:
-    "https://firebasestorage.googleapis.com/v0/b/techmind-assets.appspot.com/o/deplomas%2FAiDataScienceDeploma.jfif?alt=media&token=bdea3fca-6086-4c03-944d-08fb1e3eb161",
+    "https://firebasestorage.googleapis.com/v0/b/techmind-assets.appspot.com/o/Diplomas%2FDS_Main.jfif?alt=media&token=f13928cf-add8-40af-be43-6cd90bd1cd6f",
   courses: [],
   have_video: false,
 };

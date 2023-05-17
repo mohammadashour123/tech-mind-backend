@@ -77,6 +77,7 @@ const getAllDiplomas = async (req: Request, res: Response): Promise<void> => {
     const diplomas = await Diploma.find(filterQuery)
       .skip(skip)
       .limit(limit)
+      .sort({ createdAt: -1 })
       .select(dataArr);
 
     res

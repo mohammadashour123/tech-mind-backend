@@ -10,7 +10,10 @@ import {
 const getAllMessages = async (req: Request, res: Response): Promise<void> => {
   try {
     const { limit, skip } = getSkipLimit(req.query);
-    const messages = await Message.find().skip(skip).limit(limit);
+    const messages = await Message.find()
+      .skip(skip)
+      .limit(limit)
+      .sort({ createdAt: -1 });
 
     res
       .status(200)

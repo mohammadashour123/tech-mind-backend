@@ -99,11 +99,11 @@ const courses: CourseType[] = [
     ],
     have_target: false, // to display
     is_dependent: true,
-    icon: "https://firebasestorage.googleapis.com/v0/b/techmind-assets.appspot.com/o/courses%2Fpytion_icon.png?alt=media&token=f3904b91-e7b8-4d34-a136-adf55710ff39",
+    icon: "https://firebasestorage.googleapis.com/v0/b/techmind-assets.appspot.com/o/Courses%2FPython_Icon.png?alt=media&token=81a0f41d-df07-43c8-b87d-fd9f1f440776",
     main_img:
-      "https://firebasestorage.googleapis.com/v0/b/techmind-assets.appspot.com/o/courses%2Fpyton_main_img.jfif?alt=media&token=4acb30e4-4c7b-4004-ab6f-cdda8b41cbfe",
+      "https://firebasestorage.googleapis.com/v0/b/techmind-assets.appspot.com/o/Courses%2FPython_OtherSrc.jfif?alt=media&token=1f09632d-8ba0-48e8-bb1b-6d717fe10979",
     other_src:
-      "https://firebasestorage.googleapis.com/v0/b/techmind-assets.appspot.com/o/courses%2Fpython_other_src.gif?alt=media&token=fcc56189-c4d6-4e49-8156-00cddaefe1ed",
+      "https://firebasestorage.googleapis.com/v0/b/techmind-assets.appspot.com/o/Courses%2FPython_OtherSrcgif.gif?alt=media&token=2126680e-03f3-4ef0-a994-e9cc8b631aa9",
     have_objectives: false,
     objectives: [
       {
