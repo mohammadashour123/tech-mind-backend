@@ -21,15 +21,6 @@ const getDiploma = async (req: Request, res: Response): Promise<void> => {
     const diploma = await Diploma.findById(id);
     if (!diploma) throw Error("Invalid Diploma ID");
 
-    // // get diploma courses
-    // const diplomaCoursesPromises = diploma.courses.map(async (course) => {
-    //   return await Course.findById(course._id).select(couresDataToSelecte);
-    // });
-
-    // // get diploma courses data
-    // const diplomaCoursesResponse = await Promise.all(diplomaCoursesPromises);
-    // const diplomaCourses = diplomaCoursesResponse as unknown as DiplomaCourse[];
-
     const diplomaCourses = (await Course.find({
       _id: { $in: diploma.courses },
     })) as DiplomaCourse[];

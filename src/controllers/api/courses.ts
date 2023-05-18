@@ -106,22 +106,13 @@ const getAllCourses = async (req: Request, res: Response): Promise<void> => {
 //   while (c < 300) {
 //     console.log(c + " Started");
 //     const createdCourse1 = new Course({
-//       ...courses[0],
+//       ...courses,
 //       name: {
-//         AR: courses[0].name.AR + " " + c,
-//         EN: courses[0].name.EN + " " + c,
+//         AR: courses.name.AR + " " + c,
+//         EN: courses.name.EN + " " + c,
 //       },
 //     });
 //     await createdCourse1.save();
-//     const createdCourse2 = new Course({
-//       ...courses[1],
-//       name: {
-//         AR: courses[1].name.AR + " " + c,
-//         EN: courses[1].name.EN + " " + c,
-//       },
-//     });
-//     console.log(c + " Finished");
-
 //     c++;
 //     await createdCourse2.save();
 //   }
@@ -279,38 +270,6 @@ const getRelatedCourses = async (
     // data needed from related courses
     checkId(id);
     const neededData = { _id: 1, name: 1, main_img: 1, description: 1 };
-
-    // // get parent deploma
-    // const relatedDeploma = await Deploma.findOne({
-    //   courses: { $in: id },
-    // });
-    // // ckeck if there are a parent deploma
-    // // if no select a random 3 courses
-    // if (!relatedDeploma) {
-    //   const course = await Course.findById(id);
-    //   const relatedCourses = await Course.find({
-    //     _id: { $in: course?.related_courses },
-    //   }).select(neededData);
-
-    //   res.status(200).json({
-    //     ok: true,
-    //     msg: "Related Courses is here",
-    //     data: relatedCourses,
-    //   });
-
-    //   return;
-    // }
-    // // if they have a parent deploma select a 3 courses
-    // const relatedCoursesPromises = relatedDeploma.courses
-    //   .filter((course) => !course.equals(id))
-    //   .map((course) => course.toString())
-    //   .slice(0, 3)
-    //   .map(async (id) => {
-    //     const course = await Course.findById(id).select(neededData);
-    //     return course;
-    //   });
-    // // wait until they return
-    // const relatedCourses = await Promise.all(relatedCoursesPromises);
 
     const course = await Course.findById(id).select("related_courses");
 
