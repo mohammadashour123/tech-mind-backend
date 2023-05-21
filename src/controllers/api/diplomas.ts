@@ -8,7 +8,12 @@ import {
   getDiplomaDataFromBody,
   couresDataToSelecte,
 } from "../../utils/diploma.js";
-import { checkId, deleteTechImages, getSkipLimit } from "../../utils/index.js";
+import {
+  checkId,
+  deleteTechImages,
+  getSkipLimit,
+  updateTechImages,
+} from "../../utils/index.js";
 import diploma from "../../diploma.js";
 
 const getDiploma = async (req: Request, res: Response): Promise<void> => {
@@ -86,6 +91,11 @@ const getAllDiplomas = async (req: Request, res: Response): Promise<void> => {
 };
 
 // (async () => {
+//   // delete all
+//   await Diploma.deleteMany();
+// })();
+
+// (async () => {
 //   let c = 0;
 //   while (c < 400) {
 //     console.log(c + " Started");
@@ -113,7 +123,7 @@ const addDiploma = async (req: Request, res: Response): Promise<void> => {
     const createdDiploma = new Diploma(diploma);
     await createdDiploma.save();
 
-    res.status(200).json({ ok: true, msg: "Successfully created" });
+    res.status(200).json({ ok: true, msg: "Successfully added" });
   } catch (err) {
     let msg = "";
     if (err instanceof Error) {
@@ -142,8 +152,13 @@ const updateDiploma = async (req: Request, res: Response): Promise<void> => {
     const diploma = getDiplomaDataFromBody(body);
 
     // update the diploma
-    const newDiploma = await Diploma.findByIdAndUpdate(id, diploma);
-    if (!newDiploma) throw Error("Invalid Diploma ID");
+    const oldDiploma = await Diploma.findById(id);
+    if (!oldDiploma) throw Error("Invalid Diploma ID");
+
+    await Diploma.findByIdAndUpdate(id, diploma);
+
+    // delete old images
+    updateTechImages(oldDiploma, diploma, "Diploma");
 
     // return successful message
     res.status(200).json({ ok: true, msg: "Successfully Updated" });
@@ -178,7 +193,7 @@ const deleteDiploma = async (req: Request, res: Response): Promise<void> => {
     if (err instanceof Error) {
       msg = err.message;
     } else {
-      msg = "Unable to add this diploma";
+      msg = "Unable to delete this diploma";
     }
     res.status(400).json({ ok: false, msg });
   }
@@ -205,7 +220,7 @@ const addDiplomaCourse = async (req: Request, res: Response): Promise<void> => {
 
     if (isExistInDiploma) throw Error("Course is already exist");
 
-    // update the diploma
+    // add the diploma
     const diploma = await Diploma.findByIdAndUpdate(id, {
       $push: { courses: courseID },
     });
@@ -221,7 +236,7 @@ const addDiplomaCourse = async (req: Request, res: Response): Promise<void> => {
     if (err instanceof Error) {
       msg = err.message;
     } else {
-      msg = "Unable to add this diploma";
+      msg = "Unable to add this course to diploma";
     }
     res.status(400).json({ ok: false, msg });
   }
@@ -250,7 +265,7 @@ const deleteDiplomaCourse = async (
 
     if (!isExistInDiploma) throw Error("Course isn't in diploma");
 
-    // update the diploma
+    // delete the diploma
     const diploma = await Diploma.findByIdAndUpdate(id, {
       $pull: { courses: courseID },
     });
@@ -266,7 +281,7 @@ const deleteDiplomaCourse = async (
     if (err instanceof Error) {
       msg = err.message;
     } else {
-      msg = "Unable to add this diploma";
+      msg = "Unable to delete this course from diploma";
     }
     res.status(400).json({ ok: false, msg });
   }

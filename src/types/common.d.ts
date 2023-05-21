@@ -12,7 +12,7 @@ export interface SimpleCourse {
   description: StringLang;
   overview: StringLangs;
   main_img: string;
-  other_src: String;
+  other_src: string;
   what_you_will_learn: StringLangs;
   fqa: {
     q: StringLang;

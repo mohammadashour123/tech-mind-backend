@@ -51,6 +51,11 @@ const getMessage = async (req: Request, res: Response): Promise<void> => {
 };
 
 // (async () => {
+//   // delete all
+//   await Message.deleteMany();
+// })();
+
+// (async () => {
 //   let c = 0;
 //   while (c < 1000) {
 //     console.log(c + " started");

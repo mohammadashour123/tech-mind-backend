@@ -9,7 +9,12 @@ import {
   getCourseDataFromBody,
 } from "../../utils/course.js";
 
-import { checkId, deleteTechImages, getSkipLimit } from "../../utils/index.js";
+import {
+  checkId,
+  deleteTechImages,
+  getSkipLimit,
+  updateTechImages,
+} from "../../utils/index.js";
 
 const getCourse = async (req: Request, res: Response): Promise<void> => {
   // get course id
@@ -73,7 +78,6 @@ const getAllCourses = async (req: Request, res: Response): Promise<void> => {
     let filterQuery = { is_dependent } as any;
     if (q) {
       const regex = new RegExp(`.*${q.toLowerCase()}.*`, "ig");
-      console.log(regex);
       filterQuery = {
         $or: [{ "name.AR": regex }, { "name.EN": regex }],
         is_dependent,
@@ -100,6 +104,11 @@ const getAllCourses = async (req: Request, res: Response): Promise<void> => {
     res.status(400).json({ ok: false, msg });
   }
 };
+
+// // delete all
+// (async () => {
+//   await Course.deleteMany();
+// })();
 
 // (async () => {
 //   let c = 0;
@@ -157,8 +166,13 @@ const updateCourse = async (req: Request, res: Response): Promise<void> => {
 
     // check if  course exists
     checkId(id);
-    const newCourse = await Course.findByIdAndUpdate(id, course);
-    if (!newCourse) throw Error("Invalid Course ID");
+    const oldCourse = await Course.findById(id);
+    if (!oldCourse) throw Error("Invalid Course ID");
+
+    await updateTechImages(oldCourse, course, "Course");
+
+    // update the course
+    await Course.findByIdAndUpdate(id, course);
 
     res.status(200).json({ ok: true, msg: "Successfully Updated" });
   } catch (err) {
@@ -266,7 +280,6 @@ const getRelatedCourses = async (
     // get course id
     const id = req.params.id;
     const is_dependent = req.query.is_dependent || [true, false];
-    console.log(is_dependent);
     // data needed from related courses
     checkId(id);
     const neededData = { _id: 1, name: 1, main_img: 1, description: 1 };

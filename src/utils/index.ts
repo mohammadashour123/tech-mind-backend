@@ -99,6 +99,37 @@ export const deleteTechImages = async (
     const objectivesImg = newData?.objectives?.map((obj) => obj.icon);
     imgs = [...imgs, ...(objectivesImg || []), data.icon];
   }
+  const promises = imgs.map(async (ele) => await deleteImage(ele));
+  return await Promise.all(promises);
+};
+
+export const updateTechImages = async (
+  oldTech: any,
+  newTech: any,
+  type: "Course" | "Diploma"
+) => {
+  let imgs = [];
+
+  if (oldTech.main_img !== newTech.main_img) imgs.push(oldTech.main_img);
+  if (oldTech.other_src !== newTech.other_src) imgs.push(oldTech.other_src);
+
+  if (type === "Course") {
+    const courseOldData = oldTech as CourseType;
+    const courseNewData = newTech as CourseType;
+
+    if (courseOldData.icon !== courseNewData.icon)
+      imgs.push(courseOldData.icon);
+
+    const oldObjectivesImg =
+      courseOldData?.objectives?.map((obj) => obj.icon) || [];
+    const newObjectivesImg =
+      courseNewData?.objectives?.map((obj) => obj.icon) || [];
+
+    for (let i = 0; i < (oldObjectivesImg.length || 0); i++)
+      if (oldObjectivesImg[i] !== newObjectivesImg[i])
+        imgs.push(oldObjectivesImg[i]);
+  }
+
   console.log(imgs);
   const promises = imgs.map(async (ele) => await deleteImage(ele));
   return await Promise.all(promises);
