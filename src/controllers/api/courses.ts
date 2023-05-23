@@ -59,6 +59,7 @@ const getCourse = async (req: Request, res: Response): Promise<void> => {
 const getAllCourses = async (req: Request, res: Response): Promise<void> => {
   let query = req.query;
   const q = req.query.query as string;
+  const sort = JSON.parse((req.query.sort as string) || "false");
 
   const { limit, skip } = getSkipLimit(query);
   const is_dependent = query.is_dependent || { $in: [true, false] };
@@ -88,7 +89,7 @@ const getAllCourses = async (req: Request, res: Response): Promise<void> => {
     const courses = await Course.find(filterQuery)
       .skip(skip)
       .limit(limit)
-      .sort({ createdAt: -1 })
+      .sort({ createdAt: sort ? -1 : 1 })
       .select(dataArr);
     res
       .status(200)

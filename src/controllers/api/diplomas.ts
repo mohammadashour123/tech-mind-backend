@@ -30,8 +30,6 @@ const getDiploma = async (req: Request, res: Response): Promise<void> => {
       _id: { $in: diploma.courses },
     })) as DiplomaCourse[];
 
-    console.log(diplomaCourses);
-
     const diplomaCoursesData = getDiplomaCoursesData(diplomaCourses);
 
     // return the diploma with the data
@@ -54,6 +52,7 @@ const getDiploma = async (req: Request, res: Response): Promise<void> => {
 const getAllDiplomas = async (req: Request, res: Response): Promise<void> => {
   const query = req.query;
   const q = req.query.query as string;
+  const sort = JSON.parse((req.query.sort as string) || "false");
 
   const { limit, skip } = getSkipLimit(query);
 
@@ -73,7 +72,7 @@ const getAllDiplomas = async (req: Request, res: Response): Promise<void> => {
     const diplomas = await Diploma.find(filterQuery)
       .skip(skip)
       .limit(limit)
-      .sort({ createdAt: -1 })
+      .sort({ createdAt: sort ? -1 : 1 })
       .select(dataArr);
 
     res

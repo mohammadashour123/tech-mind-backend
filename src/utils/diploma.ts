@@ -50,7 +50,6 @@ export const getDiplomaDataFromBody = (diploma: DiplomaType): DiplomaType => {
     overview,
     what_you_will_learn,
     who_is_this_course_for,
-    courses: [],
     have_video,
   };
 };
