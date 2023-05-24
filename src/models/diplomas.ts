@@ -1,6 +1,6 @@
 import { Schema, model, Types } from "mongoose";
 import { DiplomaType } from "../types/diploma";
-import common from "./common.js";
+import common from "./_common.js";
 
 const DiplomaSchema = new Schema<DiplomaType>(
   {
