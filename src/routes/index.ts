@@ -3,6 +3,7 @@ import courses from "./api/courses.js";
 import deplomas from "./api/deplomas.js";
 import reservations from "./api/reservations.js";
 import messages from "./api/messages.js";
+import feedbacks from "./api/feedbacks.js";
 
 const router = express.Router();
 
@@ -10,6 +11,7 @@ router.use("/courses", courses);
 router.use("/diplomas", deplomas);
 router.use("/reservations", reservations);
 router.use("/messages", messages);
+router.use("/feedbacks", feedbacks);
 
 router.post("/auth", (req, res) => {
   const { username, password } = req.body;

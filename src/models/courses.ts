@@ -1,7 +1,7 @@
 import { timeStamp } from "console";
 import { Schema, model, Types } from "mongoose";
 import { CourseType } from "../types/course";
-import common from "./common.js";
+import common from "./_common.js";
 
 const CourseSchema = new Schema<CourseType>(
   {
