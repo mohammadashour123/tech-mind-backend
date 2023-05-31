@@ -60,7 +60,7 @@ export const getDiplomaCoursesData = (diplomaCourses: DiplomaCourse[]) => {
   let workshops = 0;
   let duration = 0;
   let courses = diplomaCourses.map((ele) => {
-    lectures += ele.duration;
+    lectures += ele.lectures;
     real_projects += ele.real_projects;
     workshops += ele.workshops;
     duration += ele.duration;
